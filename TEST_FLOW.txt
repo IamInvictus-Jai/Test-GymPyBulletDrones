@@ -1,0 +1,182 @@
+EDITH DRONE ENVIRONMENT - TEST FLOW DIAGRAM
+═══════════════════════════════════════════════════════════════════════════════
+
+                              START HERE
+                                  │
+                                  ▼
+                    ┌─────────────────────────────┐
+                    │   Run setup.sh / setup.bat  │
+                    │   (Install dependencies)    │
+                    └─────────────┬───────────────┘
+                                  │
+                                  ▼
+                    ┌─────────────────────────────┐
+                    │  python3 run_all_tests.py   │
+                    └─────────────┬───────────────┘
+                                  │
+                                  ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         PHASE 1: CORE LIBRARY                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                  │
+                    ┌─────────────▼───────────────┐
+                    │  Test 01: Imports           │
+                    │  All packages installed?    │
+                    └─────────────┬───────────────┘
+                                  │
+                         ┌────────┴────────┐
+                         │                 │
+                      PASS              FAIL
+                         │                 │
+                         │                 └──► FIX: Install missing packages
+                         │                      STOP: Do not proceed
+                         ▼
+                    ┌─────────────────────────────┐
+                    │  Test 02: Headless Basic    │
+                    │  PyBullet DIRECT mode?      │
+                    └─────────────┬───────────────┘
+                                  │
+                         ┌────────┴────────┐
+                         │                 │
+                      PASS              FAIL
+                         │                 │
+                         │                 └──► FIX: Critical failure
+                         │                      STOP: Cannot run headless
+                         ▼
+                    ┌─────────────────────────────┐
+                    │  Test 03: Headless Env      │
+                    │  HoverAviary without GUI?   │
+                    └─────────────┬───────────────┘
+                                  │
+                         ┌────────┴────────┐
+                         │                 │
+                      PASS              FAIL
+                         │                 │
+                         │                 └──► FIX: Check branch (main)
+                         │                      STOP: Fix before proceeding
+                         ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    PHASE 2: CAMERA TEST (DECISION GATE)                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                  │
+                    ┌─────────────▼───────────────┐
+                    │  Test 04: Camera Headless   │
+                    │  TinyRenderer produces      │
+                    │  usable images?             │
+                    └─────────────┬───────────────┘
+                                  │
+                         ┌────────┴────────┐
+                         │                 │
+                      PASS              FAIL
+                         │                 │
+                         │                 │
+         ┌───────────────┘                 └───────────────┐
+         │                                                 │
+         ▼                                                 ▼
+┌────────────────────┐                          ┌────────────────────┐
+│  DECISION:         │                          │  DECISION:         │
+│  Vision-Based      │                          │  Raycast-Based     │
+│  scan_area         │                          │  scan_area         │
+└────────┬───────────┘                          └────────┬───────────┘
+         │                                                 │
+         │  • OpenCV color masking                        │  • p.rayTestBatch()
+         │  • Detect red/green objects                    │  • 360° detection
+         │  • Continue to test 07                         │  • Skip test 07
+         │                                                 │
+         └───────────────┬─────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      PHASE 3: CORE MECHANICS                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+                         │
+         ┌───────────────┼───────────────┐
+         │               │               │
+         ▼               ▼               ▼
+    ┌────────┐     ┌────────┐     ┌────────┐
+    │Test 05 │     │Test 06 │     │Test 07 │
+    │Spawn & │     │Collision│    │OpenCV  │
+    │Control │     │Detection│    │Pipeline│
+    └───┬────┘     └───┬────┘     └───┬────┘
+        │              │              │
+        │              │              │ (Skip if camera failed)
+        │              │              │
+        └──────────────┴──────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           TEST COMPLETE                                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+                       │
+         ┌─────────────┴─────────────┐
+         │                           │
+         ▼                           ▼
+┌────────────────────┐      ┌────────────────────┐
+│  ALL TESTS PASS    │      │  CAMERA FAILED     │
+│                    │      │  (Others pass)     │
+│  ✓ Headless works  │      │                    │
+│  ✓ Camera works    │      │  ✓ Headless works  │
+│  ✓ All mechanics   │      │  ✗ Camera fails    │
+│                    │      │  ✓ Raycast works   │
+│  NEXT STEP:        │      │                    │
+│  Implement vision- │      │  NEXT STEP:        │
+│  based scan_area   │      │  Implement raycast-│
+│                    │      │  based scan_area   │
+│  Use OpenCV color  │      │                    │
+│  masking           │      │  Use p.rayTestBatch│
+└────────────────────┘      └────────────────────┘
+         │                           │
+         └───────────────┬───────────┘
+                         │
+                         ▼
+                ┌────────────────────┐
+                │  BUILD ENVIRONMENT │
+                │                    │
+                │  1. Implement      │
+                │     scan_area      │
+                │  2. Build 7 other  │
+                │     tools          │
+                │  3. Create Task 1  │
+                │  4. Test with      │
+                │     random agent   │
+                └────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════════
+KEY DECISION POINTS
+═══════════════════════════════════════════════════════════════════════════════
+
+Test 01-03 FAIL → Fix installation, do not proceed
+Test 04 PASS    → Vision-based scan_area (OpenCV)
+Test 04 FAIL    → Raycast-based scan_area (p.rayTestBatch)
+                  THIS IS NOT A PROJECT FAILURE
+
+═══════════════════════════════════════════════════════════════════════════════
+TIME BUDGET
+═══════════════════════════════════════════════════════════════════════════════
+
+Setup:        30-60 min
+Tests 01-03:   5-10 min  (CRITICAL - must pass)
+Test 04:       5-10 min  (DECISION GATE)
+Tests 05-07:  15-20 min  (Verification only)
+─────────────────────────
+TOTAL:        55-100 min
+
+═══════════════════════════════════════════════════════════════════════════════
+COMMANDS
+═══════════════════════════════════════════════════════════════════════════════
+
+# Run all tests
+python3 run_all_tests.py
+
+# Run individual tests
+python3 test_01_imports.py
+python3 test_02_headless_basic.py
+python3 test_03_headless_env.py
+python3 test_04_camera_headless.py  # CRITICAL
+
+# Check camera output
+open test_camera_output.png  # macOS
+xdg-open test_camera_output.png  # Linux
+
+═══════════════════════════════════════════════════════════════════════════════
