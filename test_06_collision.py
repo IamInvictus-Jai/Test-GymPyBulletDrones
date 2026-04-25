@@ -74,14 +74,13 @@ def test_collision():
     env = None
     
     try:
-        from gym_pybullet_drones.envs.BaseAviary import BaseAviary
+        from gym_pybullet_drones.envs.HoverAviary import HoverAviary
         from gym_pybullet_drones.utils.enums import DroneModel, Physics
         
         # Create environment
         print("\n[1/5] Creating environment...")
-        env = BaseAviary(
+        env = HoverAviary(
             drone_model=DroneModel.CF2X,
-            num_drones=1,
             initial_xyzs=np.array([[0.0, 0.0, 1.0]]),
             physics=Physics.PYB,
             gui=False
