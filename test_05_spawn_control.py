@@ -16,7 +16,7 @@ def test_spawn_control():
     env = None
     
     try:
-        from gym_pybullet_drones.envs.BaseAviary import BaseAviary
+        from gym_pybullet_drones.envs.HoverAviary import HoverAviary
         from gym_pybullet_drones.utils.enums import DroneModel, Physics
         from gym_pybullet_drones.control.DSLPIDControl import DSLPIDControl
         import pybullet as p
@@ -25,9 +25,8 @@ def test_spawn_control():
         print("\n[1/4] Testing single drone spawn at custom position...")
         spawn_pos = np.array([[2.0, 3.0, 1.5]])
         
-        env = BaseAviary(
+        env = HoverAviary(
             drone_model=DroneModel.CF2X,
-            num_drones=1,
             initial_xyzs=spawn_pos,
             initial_rpys=np.array([[0.0, 0.0, 0.0]]),
             physics=Physics.PYB,
@@ -62,7 +61,9 @@ def test_spawn_control():
             [2.0, 0.0, 1.0]
         ])
         
-        env = BaseAviary(
+        from gym_pybullet_drones.envs.MultiHoverAviary import MultiHoverAviary
+        
+        env = MultiHoverAviary(
             drone_model=DroneModel.CF2X,
             num_drones=2,
             initial_xyzs=spawn_positions,
