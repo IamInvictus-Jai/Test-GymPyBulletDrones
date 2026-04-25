@@ -18,7 +18,9 @@ def test_imports():
     print("\n[1/6] Testing PyBullet import...")
     try:
         import pybullet as p
-        print(f"✓ PyBullet version: {p.getVersionInfo()}")
+        # getVersionInfo() doesn't exist in all versions, use __version__ or just confirm import
+        version = getattr(p, '__version__', 'unknown')
+        print(f"✓ PyBullet imported successfully (version: {version})")
     except ImportError as e:
         print(f"✗ FAILED: {e}")
         failures.append("pybullet")
