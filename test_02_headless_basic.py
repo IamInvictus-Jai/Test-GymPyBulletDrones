@@ -6,6 +6,7 @@ This is CRITICAL for Docker deployment - must work without display server.
 
 import sys
 import pybullet as p
+import pybullet_data
 import numpy as np
 
 def test_headless_basic():
@@ -21,6 +22,9 @@ def test_headless_basic():
         print("\n[1/3] Connecting to PyBullet in DIRECT mode...")
         client = p.connect(p.DIRECT)
         print(f"✓ Connected successfully (client ID: {client})")
+        
+        # Set data path for URDF files
+        p.setAdditionalSearchPath(pybullet_data.getDataPath())
         
         # Test 2: Load ground plane
         print("\n[2/3] Loading ground plane URDF...")
